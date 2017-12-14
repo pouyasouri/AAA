@@ -7,6 +7,11 @@ public class SpreadsheetLocation implements Location
 	private int row;
 	private int col;
 	
+	 public SpreadsheetLocation(int rowp, int colp) {
+	        row = rowp;
+	        col = colp;
+	    }
+	
     @Override
     public int getRow()
     {
