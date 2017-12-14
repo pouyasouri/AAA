@@ -1,5 +1,7 @@
 package textExcel;
 
+import sun.invoke.empty.Empty;
+
 // Update this file with your own code.
 
 public class Spreadsheet implements Grid
@@ -8,9 +10,9 @@ public class Spreadsheet implements Grid
 	
 	public Spreadsheet(){
 		cell = new Cell [12][20];
-		for (int i=0; i > 12; i++){
-			for (int j=0; j > 20; j++){
-				cell[i][j] = "";
+		for (int i=0; i < 12; i++){
+			for (int j=0; j < 20; j++){
+				cell[i][j] = new EmptyCell();
 			}
 		}
 		
@@ -19,20 +21,19 @@ public class Spreadsheet implements Grid
 	@Override
 	public String processCommand(String command)
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getRows()
 	{
-		return 0;
+		return cell.length;
 	}
 
 	@Override
 	public int getCols()
 	{
-		return 0;
+		return cell[0].length;
 	}
 
 	@Override
