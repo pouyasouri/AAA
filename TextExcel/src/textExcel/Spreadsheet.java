@@ -4,6 +4,17 @@ package textExcel;
 
 public class Spreadsheet implements Grid
 {
+	private Cell[][] cell;
+	
+	public Spreadsheet(){
+		cell = new Cell [12][20];
+		for (int i=0; i > 12; i++){
+			for (int j=0; j > 20; j++){
+				cell[i][j] = "";
+			}
+		}
+		
+	}
 
 	@Override
 	public String processCommand(String command)
@@ -15,14 +26,12 @@ public class Spreadsheet implements Grid
 	@Override
 	public int getRows()
 	{
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getCols()
 	{
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
