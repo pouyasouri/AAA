@@ -21,7 +21,7 @@ public class Spreadsheet implements Grid
 	@Override
 	public String processCommand(String command)
 	{
-		return null;
+		return "";
 	}
 
 	@Override
