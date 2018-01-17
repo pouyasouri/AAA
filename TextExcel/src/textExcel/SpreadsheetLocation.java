@@ -6,6 +6,7 @@ public class SpreadsheetLocation implements Location
 {
 	private int row;
 	private int col;
+	static String Input = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
 	 public SpreadsheetLocation(int rowp, int colp) {
 	        row = rowp;
@@ -22,6 +23,13 @@ public class SpreadsheetLocation implements Location
     public int getCol()
     {
         return col;
+    }
+    public static int CCTI(char character) {
+    	return Input.indexOf(Character.toUpperCase(character));
+    }
+    
+    public static char CITC (int idx) {
+    	return Input.charAt(idx);
     }
     
     public SpreadsheetLocation(String cellName)
