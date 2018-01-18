@@ -23,6 +23,19 @@ public class Spreadsheet implements Grid
 	{
 		return "";
 	}
+	public boolean setCell(SpreadsheetLocation location, Cell value) {
+		if (location == null || value == null) {
+			return false;
+		}
+		if (location.getRow() < 0 || location.getRow() >= getRows()) {
+			return false;
+		}
+		if (location.getCol() < 0 || location.getCol() >= getCols()) {
+			return false;
+		}
+		cell[location.getRow()][location.getCol()] = value;
+		return true;
+	}
 
 	@Override
 	public int getRows()
@@ -46,9 +59,50 @@ public class Spreadsheet implements Grid
 	@Override
 	public String getGridText()
 	{
-		String outcome = "";
-		return null;
+		 String grid = "";
+	        for (int i = 0; i < cell[0].length; i++) {
+	            grid += String.format("|%-10c", (char) (i + 'A'));
+	        }
+	        grid += "|\n";
+	        for (int i = 0; i < cell.length; i++) {
+	            grid += String.format("%-3d", i + 1) + formatRow(cell[i]);
+	        }
+	        return grid;
 	}
+	 public String formatCellText(Cell cell) {
+	        return "|" + cell.abbreviatedCellText();
+	    }
+
+	    public String formatRow(Cell[] cells) {
+	        String row = "";
+	        for (Cell cell : cells) {
+	            row += formatCellText(cell);
+	        }
+	        row += "|\n";
+	        return row;
+	    }
+	
+	public static String truncateOrPad(String value, int length) {
+		String format = "%-" + length + "." + length + "s";
+		return String.format(format, value);
+	}
+
+	public static String truncateOrPad(String value) {
+		return truncateOrPad(value, 10);
+	}
+	
+	public boolean clearCell(SpreadsheetLocation loc) {
+		return setCell(loc, new EmptyCell());
+	}
+	
+	public void clearAll() {
+		for (int row = 0; row < 20; row++) {
+			for (int col = 0; col < 12; col++) {
+				cell[row][col] = new EmptyCell();
+			}
+		}
+	}
+
 	
 	// You are free to use this helper method.  It takes a column letter (starting at "A")
 	// and returns the column number corresponding to that letter (0 for "A", 1 for "B", etc.)  
