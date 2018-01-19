@@ -2,17 +2,31 @@ package textExcel;
 
 public class PercentCell extends ValueCell
 {
+	
+	private String value;	
 	public PercentCell(String value) {
 		super(value);
+		this.value = value;
 	}
-
+	
 	@Override
 	public String abbreviatedCellText() {
-		return Spreadsheet.truncateOrPad(String.format("%.9s", (int)(getDoubleValue() * 100)) + "%");
+		
+		String s = value;
+		if(value.contains("."))
+		    s = value.substring(0);
+		s += "%";
+		for(int i = s.length(); i < 10; i++) {
+			s += " ";
+		}
+		
+		return s;
 	}
-
-	@Override
-	public String cellType() {
-		return "PercentCell";
+	
+	public String fullCellText() {
+		double n = Double.parseDouble(value);
+		n /= 100;
+	    String s = Double.toString(n);
+		return s;
 	}
 }
