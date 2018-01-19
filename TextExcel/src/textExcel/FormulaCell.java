@@ -6,7 +6,6 @@ public class FormulaCell extends RealCell
 	public FormulaCell(String value)
 	{
 		super(value);
-		
 	}
 	
 	public double getDoubleValue() {
@@ -14,7 +13,7 @@ public class FormulaCell extends RealCell
 	}
 	
 	public String fullCellText() {
-		return "";
+		return fullCellText();
 	}
 	
 }
