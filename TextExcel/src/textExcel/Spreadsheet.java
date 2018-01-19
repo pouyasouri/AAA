@@ -21,7 +21,48 @@ public class Spreadsheet implements Grid
 	@Override
 	public String processCommand(String command)
 	{
-		return "";
+		if(command.equals(""))
+			return "";
+		if(command.length() <= 3)
+		    return inspect(command);
+		if(command.contains("="))
+			return assignment(command);
+		if(command.toLowerCase().contains("clear") && command.length() > 5)
+			return clearOne(command);
+		else
+			return clear();
+	}
+	public String inspect(String command) {
+		SpreadsheetLocation Cell = new SpreadsheetLocation(command);
+		int row = Cell.getRow();
+		int col = Cell.getCol();
+		cell[row][col] = getCell(Cell);
+		String s = cell[row][col].fullCellText();
+		return s;
+		
+	}
+	
+    public String assignment(String command) {
+    	int equalIndex = command.indexOf("=");
+		String word = command.substring(equalIndex + 2);
+		String numWord = command.substring(equalIndex + 2);
+		String percentWord = numWord.substring(0, numWord.length() - 1);
+		String cellName = command.substring(0 , equalIndex - 1);
+		
+		SpreadsheetLocation Cell = new SpreadsheetLocation(cellName);
+		int row = Cell.getRow();
+		int col = Cell.getCol();
+			
+		if(command.contains("\""))
+		    cell[row][col] = new TextCell(word.substring(0, word.length()));
+		
+		if(command.indexOf("%") == -1 && command.indexOf("\"") == -1)
+			cell[row][col] = new ValueCell(numWord);
+		
+		if(command.contains("%"))
+			cell[row][col] = new PercentCell(percentWord);
+		
+		return getGridText();
 	}
 	public boolean setCell(SpreadsheetLocation location, Cell value) {
 		if (location == null || value == null) {
@@ -52,35 +93,29 @@ public class Spreadsheet implements Grid
 	@Override
 	public Cell getCell(Location loc)
 	{
-		// TODO Auto-generated method stub
 		return cell[loc.getRow()][loc.getCol()];
 	}
 
 	@Override
 	public String getGridText()
 	{
-		 String grid = "";
-	        for (int i = 0; i < cell[0].length; i++) {
-	            grid += String.format("|%-10c", (char) (i + 'A'));
-	        }
-	        grid += "|\n";
-	        for (int i = 0; i < cell.length; i++) {
-	            grid += String.format("%-3d", i + 1) + formatRow(cell[i]);
-	        }
-	        return grid;
+		String sheet = "   |A         |B         |C         |D         |E         |F         |"
+				+ "G         |H         |I         |J         |K         |L         |";
+		
+		
+		for(int i = 0; i < cell.length; i++) {
+			if(i < 9)
+			    sheet += "\n" + (i+1) + "  |";
+			if(i >= 9)
+				sheet += "\n" + (i+1) + " |";
+			for(int j = 0; j < cell[i].length; j++) {
+				sheet += cell[i][j].abbreviatedCellText() + "|";	
+			}
+		}
+		sheet += "\n";
+		
+		return sheet;
 	}
-	 public String formatCellText(Cell cell) {
-	        return "|" + cell.abbreviatedCellText();
-	    }
-
-	    public String formatRow(Cell[] cells) {
-	        String row = "";
-	        for (Cell cell : cells) {
-	            row += formatCellText(cell);
-	        }
-	        row += "|\n";
-	        return row;
-	    }
 	
 	public static String truncateOrPad(String value, int length) {
 		String format = "%-" + length + "." + length + "s";
@@ -91,17 +126,25 @@ public class Spreadsheet implements Grid
 		return truncateOrPad(value, 10);
 	}
 	
-	public boolean clearCell(SpreadsheetLocation loc) {
-		return setCell(loc, new EmptyCell());
-	}
-	
-	public void clearAll() {
-		for (int row = 0; row < 20; row++) {
-			for (int col = 0; col < 12; col++) {
-				cell[row][col] = new EmptyCell();
+	public String clear() {
+    	for(int i = 0; i < cell.length; i++) {
+			for(int j = 0; j < cell[j].length; j++) {
+				cell[i][j] = new EmptyCell();
 			}
 		}
-	}
+    	return getGridText();
+    }
+    
+    public String clearOne(String command) {
+    	String cellName = command.substring(6);
+    	
+    	SpreadsheetLocation Cell = new SpreadsheetLocation(cellName);
+		int row = Cell.getRow();
+		int col = Cell.getCol();
+		
+		cell[row][col] = new EmptyCell();
+		return getGridText();
+    }
 
 	
 	// You are free to use this helper method.  It takes a column letter (starting at "A")
